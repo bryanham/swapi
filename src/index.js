@@ -1,13 +1,29 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import ProfileBio from './pages/ProfileBio';
+import StarshipBio from './pages/StarshipBio';
+import PlanetBio from './pages/PlanetBio';
+import StarshipListing from './pages/StarshipLising';
+import PlanetListing from './pages/PlantListing';
+
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/profile-bio" element={<ProfileBio />} />
+        <Route path="/starship-listing" element={<StarshipListing />} />
+        <Route path="/starship-bio" element={<StarshipBio />} />
+        <Route path="/planet-listing" element={<PlanetListing />} />
+        <Route path="/planet-bio" element={<PlanetBio />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
