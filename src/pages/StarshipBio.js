@@ -1,14 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import Header from '../components/Header';
 import { useLocation } from 'react-router-dom';
 
-function StarshipBio(props){
+function StarshipBio(){
     const location = useLocation()
-    console.log(location.profile);
+    const starship = location.state.starship
+    console.log(starship);
     return (
-      <div className="App">
-        <Header />  
+      <div className="App"> 
       </div>
     );
 }
