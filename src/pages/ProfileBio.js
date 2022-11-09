@@ -1,23 +1,24 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import Card from 'react-bootstrap/Card';
+import { useLocation, Link } from 'react-router-dom';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { FaWeight } from 'react-icons/fa';
-import { GiBodyHeight } from "react-icons/gi";
+import Button from 'react-bootstrap/Button';
+import Loading from '../components/Loading';
+import { Container } from 'react-bootstrap';
 
 function ProfileBio(){
 
     const [starships, setStarships] = useState([]);
-    const [homeworld, setHomeworld] = useState();
-
+    const [homeworld, setHomeworld] = useState('');
+    const [loading, setLoading] = useState();
 
     const location = useLocation()
     const profile = location.state.profile
 
     useEffect(() => {
       async function fetchStarships(){
+        setLoading(true);
         const starshipsJson = [];
         for(const api in profile.starships){
           try{
@@ -25,54 +26,83 @@ function ProfileBio(){
             if(response.ok){
               const json = await response.json();
               starshipsJson.push(json);
+              setStarships(starshipsJson);
+              setLoading(false);
             }
           }catch(error){
             console.log(error)
           }
         }
-        
-        setStarships(starshipsJson);
-       
       }
 
       async function fetchHomeworld(){
-        let homewordData = '';
+        setLoading(true);
           try{
             const response = await fetch(profile.homeworld);
             if(response.ok){
               let json = await response.json();
-              homewordData = json;
-              console.log("json ", json)
+              setHomeworld(json);
+              setLoading(false);
             }
           }catch(error){
             console.log(error)
           }
-          setHomeworld(homewordData)
-          console.log("home ", homeworld)
       }
       
       fetchHomeworld();
-      fetchStarships();
-      
-    }, [])
+      fetchStarships();  
+    }, [profile.homeworld, profile.starships])
 
+
+    const starshipAvailable =  starships.map(s => (
+      <Link to="/starship-bio" state={{starship: s}}>
+        <Button>{s.name}</Button>
+      </Link>
+    ))
+
+    const homePlanet = 
+    <Link to="/planet-bio" state={{planet: homeworld}}>
+      <Button>{homeworld.name}</Button>
+    </Link>
+
+
+    if(loading){
+      return (
+        <Loading />
+      )
+    } else {
     return (
       <div className="App">
-        <Row className="justify-content-md-center">
-          <Col lg="10">
-            <Card>
-              <Card.Header>Bio</Card.Header>
-              <Card.Body>
-                <Card.Title><h1>{profile.name}</h1></Card.Title>
-                  <GiBodyHeight /> {profile.height}cm 
-                  <FaWeight /> {profile.mass}kg
-              </Card.Body>
-              <Card.Footer>Last Update: {profile.edited.slice(0,10)}</Card.Footer>
-            </Card>
-          </Col> 
-        </Row>
+        <Container>
+          <Row className="nameCol">
+            <Col >
+              <h5>Bio</h5>
+              <h1>{profile.name}</h1>
+              <p>Last Updated: {profile.edited.slice(0,10)}</p>
+              <Button>Add to Favourites</Button>
+            </Col>
+          </Row>
+          <hr className="divider"></hr>
+          <Row className="infoCol">
+            <Col>
+              <h4>Height: {profile.height} cm</h4>
+              <h4>Weight: {profile.mass} kg</h4>
+              <h4>Gender: {profile.gender}</h4>
+              </Col>
+              <Col>
+              <h4>Birth Year: {profile.birth_year}</h4>
+              <h4>Hair Colour: {profile.hair_color}</h4>
+              <h4>Eye Colour: {profile.eye_color}</h4>
+              </Col>
+              <Col>
+              <h4>Starship: {starships.length === 0 ? <p>No Assigned Starships</p>:  starshipAvailable} </h4>
+              <h4>Homeworld: {homePlanet}</h4>
+            </Col>         
+          </Row>
+        </Container>
       </div>
     );
+    }
 }
 
 export default ProfileBio;

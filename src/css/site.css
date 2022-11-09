@@ -1,0 +1,66 @@
+html, body{
+    overflow-x: hidden;
+    }
+    
+.navbar-nav a {
+    color: #fff;
+    text-decoration: none;
+    padding-right: 10px;
+}
+
+.navbar-nav a:hover {
+    text-decoration: underline;
+    color: #FFE81F;
+}
+
+body {
+    background-color: #000;
+}
+
+.list-group-item {
+    background-color: #FFE81F
+}
+
+.list-group a {
+    text-decoration: none;
+}
+
+.list-group-item:hover {
+    color: #fff;
+}
+
+.loadingSpinner {
+    color: #FFE81F;
+    padding: 10px;
+}
+
+.searchBox {
+    margin: 20px;
+    padding: 10px;
+    width: 50%;
+    background-color: black;
+    border: none;
+    border-bottom: #FFE81F 1px solid;
+    color: #FFE81F
+}
+
+.searchBox::placeholder{
+    color: #FFE81F;
+}
+
+.nameCol {
+    padding-top: 20px;
+}
+
+.infoCol, .nameCol {
+    color:#FFE81F;
+}
+
+.divider {
+    color: #FFE81F;
+}
+
+.col h4{
+    padding: 10px;
+}
+

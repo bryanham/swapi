@@ -1,13 +1,23 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React from 'react';
+import React, { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Link } from "react-router-dom";
 
 function StarshipListing({starships}){
+
+    const [query, setQuery] = useState("");
+
     return(
       <Container>
-          {starships.map(p => (
+          <input type="text" placeholder="Search..." className="searchBox" onChange={event => {setQuery(event.target.value)}}></input>            
+            {starships.filter((val) => {
+                if(query === ""){
+                    return val
+                } else if (val.name.toLowerCase().includes(query.toLowerCase())){
+                    return val
+                }
+            }).map(p => (
               <ListGroup key={p.name}>
                   <Link to="/starship-bio" state={{starship: p}}>
                       <ListGroup.Item key={p.name}
