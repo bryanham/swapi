@@ -6,15 +6,22 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Loading from '../components/Loading';
 import { Container } from 'react-bootstrap';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { favouriteState } from '../components/favouriteAtom';
+
 
 function ProfileBio(){
+
+    const location = useLocation()
+    const profile = location.state.profile
 
     const [starships, setStarships] = useState([]);
     const [homeworld, setHomeworld] = useState('');
     const [loading, setLoading] = useState();
-
-    const location = useLocation()
-    const profile = location.state.profile
+    const setFavourite = useSetRecoilState(favouriteState);
+    const favourites = useRecoilValue(favouriteState);
+    const [button, setButton] = useState(false)
+    const index = favourites.findIndex((listItem) => listItem === profile);
 
     useEffect(() => {
       async function fetchStarships(){
@@ -54,7 +61,8 @@ function ProfileBio(){
     }, [profile.homeworld, profile.starships])
 
 
-    const starshipAvailable =  starships.map(s => (
+
+    const starshipAvailable = starships.map(s => (
       <Link to="/starship-bio" state={{starship: s}}>
         <Button>{s.name}</Button>
       </Link>
@@ -64,6 +72,27 @@ function ProfileBio(){
     <Link to="/planet-bio" state={{planet: homeworld}}>
       <Button>{homeworld.name}</Button>
     </Link>
+
+    const addFavourite = () => {
+      setFavourite((otherFavourites) =>[...otherFavourites, profile]);
+    }
+
+    const deleteFavourite = () => {
+      const newFavourites = removeItemAtIndex(favourites, index);
+      setFavourite(newFavourites)
+    }
+
+    function removeItemAtIndex(arr, index) {
+      return [...arr.slice(0, index), ...arr.slice(index + 1)];
+    }
+
+    const favouriteButton = () => {
+      if(favourites.includes(profile)){
+        return <Button onClick={deleteFavourite}>Remove from Favourites</Button>
+      } else {
+        return <Button onClick={addFavourite}>Add to Favourites</Button>
+      }
+    }
 
 
     if(loading){
@@ -79,7 +108,8 @@ function ProfileBio(){
               <h5>Bio</h5>
               <h1>{profile.name}</h1>
               <p>Last Updated: {profile.edited.slice(0,10)}</p>
-              <Button>Add to Favourites</Button>
+              <Button onClick={addFavourite}>Add to Favourites</Button>
+              <Button onClick={deleteFavourite}>Remove from Favourites</Button>
             </Col>
           </Row>
           <hr className="divider"></hr>
