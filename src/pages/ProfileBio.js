@@ -20,7 +20,7 @@ function ProfileBio(){
     const [loading, setLoading] = useState();
     const setFavourite = useSetRecoilState(favouriteState);
     const favourites = useRecoilValue(favouriteState);
-    const [button, setButton] = useState(false)
+    const [favourite, setFav] = useState(false)
     const index = favourites.findIndex((listItem) => listItem === profile);
 
     useEffect(() => {
@@ -55,10 +55,17 @@ function ProfileBio(){
             console.log(error)
           }
       }
+
+      function checkFavourites(){
+        if (favourites.includes(profile)){
+          setFav(true);
+        }
+      }
       
+      checkFavourites();
       fetchHomeworld();
       fetchStarships();  
-    }, [profile.homeworld, profile.starships])
+    }, [profile.homeworld, profile.starships, favourites])
 
 
 
@@ -86,12 +93,13 @@ function ProfileBio(){
       return [...arr.slice(0, index), ...arr.slice(index + 1)];
     }
 
-    const favouriteButton = () => {
-      if(favourites.includes(profile)){
-        return <Button onClick={deleteFavourite}>Remove from Favourites</Button>
-      } else {
-        return <Button onClick={addFavourite}>Add to Favourites</Button>
+    const handleClick = () => {
+      if(favourite){
+        deleteFavourite();
+      }else{
+        addFavourite();
       }
+      setFav(!favourite);
     }
 
 
@@ -108,8 +116,7 @@ function ProfileBio(){
               <h5>Bio</h5>
               <h1>{profile.name}</h1>
               <p>Last Updated: {profile.edited.slice(0,10)}</p>
-              <Button onClick={addFavourite}>Add to Favourites</Button>
-              <Button onClick={deleteFavourite}>Remove from Favourites</Button>
+              <Button onClick={handleClick}>{ favourite ? "Remove from Favourites" : "Add to Favourites"}</Button>
             </Col>
           </Row>
           <hr className="divider"></hr>
