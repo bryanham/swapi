@@ -77,3 +77,7 @@ body {
     border: #FFE81F 1px solid;
 }
 
+#navigation{
+    justify-content: right;
+}
+
