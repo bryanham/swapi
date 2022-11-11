@@ -71,13 +71,13 @@ function ProfileBio(){
 
     const starshipAvailable = starships.map(s => (
       <Link to="/starship-bio" state={{starship: s}}>
-        <Button>{s.name}</Button>
+        <Button className="btn">{s.name}</Button>
       </Link>
     ))
 
     const homePlanet = 
     <Link to="/planet-bio" state={{planet: homeworld}}>
-      <Button>{homeworld.name}</Button>
+      <Button className="btn">{homeworld.name}</Button>
     </Link>
 
     const addFavourite = () => {
@@ -116,7 +116,7 @@ function ProfileBio(){
               <h5>Bio</h5>
               <h1>{profile.name}</h1>
               <p>Last Updated: {profile.edited.slice(0,10)}</p>
-              <Button onClick={handleClick}>{ favourite ? "Remove from Favourites" : "Add to Favourites"}</Button>
+              <Button className="btn" onClick={handleClick}>{ favourite ? "Remove from Favourites" : "Add to Favourites"}</Button>
             </Col>
           </Row>
           <hr className="divider"></hr>

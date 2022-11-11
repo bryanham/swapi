@@ -1,17 +1,23 @@
 import React  from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { Container } from 'react-bootstrap';
+import { Container, ListGroup } from 'react-bootstrap';
 import { useRecoilValue } from 'recoil';
 import { favouriteState } from '../components/favouriteAtom';
+import { Link } from "react-router-dom";
 
 function Favourites(){
   const favourites = useRecoilValue(favouriteState)
 
   const favouriteList = favourites.map(favourite =>(
-    <h1>{favourite.name}</h1>
+    <ListGroup>
+      <Link to="/profile-bio" state={{profile: favourite}}>
+        <ListGroup.Item key={favourite.name} style={{ padding: '20px', margin: '10px'}}>
+          <h1>{favourite.name}</h1>
+        </ListGroup.Item>
+      </Link>
+    </ListGroup>
   ))
-  console.log(favourites)
     return(
       <Container>
       <Row className="nameCol">
